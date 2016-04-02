@@ -43,6 +43,7 @@ public class MainActivity extends AppCompatActivity {
 
     public Button button1;
     public Button button2;
+    public Button button3;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,7 +51,8 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         button1= (Button)findViewById(R.id.button1);
-        button2= (Button) findViewById(R.id.button2);
+        button2= (Button)findViewById(R.id.button2);
+        button3= (Button)findViewById(R.id.button3);
 
         button1.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -67,6 +69,13 @@ public class MainActivity extends AppCompatActivity {
                 // TODO Auto-generated method stub
                 openPDF();
 
+            }
+        });
+
+        button3.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v){
+                sendPDF();
             }
         });
     }
@@ -180,5 +189,20 @@ public class MainActivity extends AppCompatActivity {
         }
 
         openPDF();
+    }
+
+    public void sendPDF(){
+        Uri uri = Uri.fromFile(new File(Environment.getExternalStorageDirectory().getAbsolutePath()+"/generatePDF"+"/demo.pdf"));
+
+        String[] mailto = {""};
+        Toast.makeText(getApplicationContext(),"exists", Toast.LENGTH_LONG).show();
+        Intent sendIntent = new Intent(Intent.ACTION_SEND);
+        sendIntent.setType("application/pdf");
+        sendIntent.putExtra(Intent.EXTRA_EMAIL, mailto);
+        sendIntent.putExtra(Intent.EXTRA_SUBJECT,"mail subject");
+        sendIntent.putExtra(Intent.EXTRA_STREAM,uri);
+        sendIntent.putExtra(Intent.EXTRA_TEXT,"Text in email");
+
+        startActivity(Intent.createChooser(sendIntent, "Send email using:"));
     }
 }
